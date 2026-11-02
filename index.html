@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ATX | Mining</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--gold:#ffd66b;--gold2:#a96b13;--bg:#080705;--muted:#bba77d;--green:#26e5a0}
+*{box-sizing:border-box}body{margin:0;color:#fff;background:radial-gradient(ellipse at 50% 42%,#49300d 0,#171006 38%,#050505 78%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg,transparent 0 38px,#f4b83b0b 39px 40px),radial-gradient(circle at 50% 50%,transparent 0 35%,#0009 90%);z-index:-1}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:16px 16px 94px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 22px}.brand{font-weight:900;letter-spacing:5px;color:var(--gold);font-size:24px;text-shadow:0 0 18px #ffb52b}.user{font-size:13px;color:var(--muted);text-align:right}
+.panel{border:1px solid #bd842c;border-radius:18px;background:linear-gradient(135deg,#171006ed,#3a250bd9,#100b05ed);box-shadow:0 0 24px #f5b52a20,inset 0 0 18px #e7a32b12;padding:16px;text-align:center}
+.eyebrow{color:#d9b66b;font-size:11px;letter-spacing:3px}.balance{font-family:Georgia,serif;font-size:clamp(28px,8vw,42px);font-weight:bold;color:#ffe6a1;text-shadow:0 2px 0 #6b3d08,0 0 16px #ffc54e;margin:8px 0}
+.unit{font-size:13px;color:#e7c77d}.gain{margin:14px auto 0;display:inline-block;padding:10px 18px;border-radius:14px;background:#063b2b;border:1px solid #22c58d;color:#43ffc1;font-weight:900;font-size:23px;box-shadow:0 0 18px #00c88a2c}
+.coin-wrap{display:grid;place-items:center;flex:1;min-height:310px;padding:24px 0}.coin{width:min(68vw,280px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 35% 28%,#fff2b2 0,#f7c54e 12%,#9d5d0c 34%,#f8d36b 49%,#7b4307 62%,#f9d66c 72%,#5d3105 83%);border:9px ridge #e8bd50;box-shadow:0 0 0 7px #4c2c0b,0 0 0 12px #d79b2c,0 0 50px #ffc54caa,inset 0 0 24px #fff2a5}
+.coin:before{content:"";position:absolute;inset:13px;border:2px solid #7b4a0d;border-radius:50%;box-shadow:inset 0 0 0 4px #f7d77d}
+.coin span{font-family:Georgia,serif;font-size:clamp(64px,19vw,94px);font-weight:1000;color:#1b1006;-webkit-text-stroke:2px #f8d77c;text-shadow:0 5px 0 #704009,0 10px 14px #000;z-index:1}
+.claim{width:100%;border:0;border-radius:50px;padding:18px 12px;margin:4px 0 12px;background:linear-gradient(#fff0a3,#f8c342 35%,#9b5709 52%,#f5c64b 70%,#fff0a3);color:#281503;font-size:25px;font-weight:1000;letter-spacing:3px;text-shadow:0 1px #fff6;box-shadow:0 5px 0 #613506,0 0 25px #f6b72d77;border:2px solid #ffe89a}
+.claim:disabled{filter:grayscale(.5);opacity:.65}.status{text-align:center;color:#d6bd8a;font-size:12px;min-height:22px}
+.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 5px calc(9px + env(safe-area-inset-bottom));background:#090806f2;border-top:1px solid #79551e;backdrop-filter:blur(14px)}
+.tab{border:0;background:none;color:#a99876;font-size:10px;padding:4px 0;display:flex;flex-direction:column;gap:4px;align-items:center}.tab b{font-size:22px;color:#e9c66b}.tab.active{color:#ffe49a}.tab.active b{filter:drop-shadow(0 0 7px #f7bd3c)}
+.view{display:none}.view.active{display:block}.list{display:grid;gap:10px;margin-top:14px}.task{display:flex;gap:12px;align-items:center;text-align:left}.task .info{flex:1}.task strong{display:block;color:#ffe3a0}.task small{color:#bca77b}.smallbtn{border:1px solid #bd8b36;border-radius:20px;background:#3a260c;color:#ffe4a0;padding:9px 12px}.bigstat{font-size:28px;color:#ffe5a1;font-weight:800;margin:8px}
+input{background:#100c06;border:1px solid #8e6729;color:#fff;padding:12px;border-radius:12px;width:100%}
+@media(min-height:800px){.coin-wrap{min-height:380px}}
+</style></head>
+<body><main class="app">
+<header class="top"><div class="brand">♛ ATX</div><div class="user" id="username">MINING NETWORK<br><span style="color:#e9c66b">● ONLINE</span></div></header>
+<section id="mine" class="view active">
+ <div class="panel"><div class="eyebrow">YOUR DIGITAL ASSETS</div><div class="balance" id="balance">0</div><div class="unit">ATX COINS</div><div class="gain">↗ +<span id="reward">25</span> ATX</div></div>
+ <div class="coin-wrap"><div class="coin" id="coin"><span>ATX</span></div></div>
+ <button class="claim" id="claim">⚡ CLAIM</button><div class="status" id="status">Your mining reward is ready</div>
+</section>
+<section id="tasks" class="view"><div class="panel"><div class="eyebrow">EARN MORE ATX</div><div class="balance">TASKS</div><div class="unit">Complete community missions</div></div><div id="tasklist" class="list"></div></section>
+<section id="miners" class="view"><div class="panel"><div class="eyebrow">MINING POWER</div><div class="balance">MINERS</div><p class="unit">Your current mining level</p><div class="bigstat" id="level">LVL 1</div><p class="unit">Level progress is based on earned ATX points.</p></div></section>
+<section id="friends" class="view"><div class="panel"><div class="eyebrow">GROW THE ATX COMMUNITY</div><div class="balance">FRIENDS</div><div class="bigstat" id="referrals">0</div><p class="unit">Invited friends</p><input id="refLink" readonly value="Loading referral link"><button class="smallbtn" style="margin-top:12px" id="copy">COPY INVITE LINK</button><p class="unit">Invite reward: credited when a new user starts through your link.</p></div></section>
+<section id="profile" class="view"><div class="panel"><div class="eyebrow">YOUR ACCOUNT</div><div class="balance">PROFILE</div><div class="unit" id="profileName">Miner</div><div class="bigstat" id="profileBalance">0 ATX</div><p class="unit">ATX points are in-app rewards and have no cash value unless a future, separately announced token program is launched.</p></div></section>
+</main>
+<nav class="tabs">
+<button class="tab active" data-view="mine"><b>♜</b>Mine</button><button class="tab" data-view="tasks"><b>▣</b>Tasks</button><button class="tab" data-view="miners"><b>⚡</b>Miners</button><button class="tab" data-view="friends"><b>♧</b>Friends</button><button class="tab" data-view="profile"><b>♙</b>Profile</button>
+</nav>
+<script>
+const tg=window.Telegram?.WebApp; tg?.ready(); tg?.expand();
+const auth= tg?.initData ? "tma "+tg.initData : "";
+const $=id=>document.getElementById(id);
+let me=null;
+async function api(path,opts={}){const r=await fetch(path,{...opts,headers:{"Authorization":auth,"Content-Type":"application/json",...(opts.headers||{})}});const d=await r.json();if(!r.ok)throw Error(d.detail||"Request failed");return d}
+function show(view){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===view));document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.view===view));if(view==="tasks")loadTasks()}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>show(b.dataset.view));
+async function refresh(){try{me=await api("/api/me");$("balance").textContent=me.balance.toLocaleString();$("reward").textContent=me.reward;$("level").textContent="LVL "+me.level;$("referrals").textContent=me.referrals;$("profileBalance").textContent=me.balance.toLocaleString()+" ATX";$("username").innerHTML=(me.name||"MINER")+"<br><span style='color:#e9c66b'>● ONLINE</span>";$("profileName").textContent=me.name||"Miner";if(me.remaining>0){$("claim").disabled=true;$("status").textContent="Next claim in "+Math.ceil(me.remaining/60)+" min"}else{$("claim").disabled=false;$("status").textContent="Your mining reward is ready"}}catch(e){$("status").textContent=e.message+" — open inside Telegram"}}
+$("claim").onclick=async()=>{try{$("claim").disabled=true;const d=await api("/api/claim",{method:"POST"});$("status").textContent="+"+d.reward+" ATX added to your balance!";tg?.HapticFeedback?.notificationOccurred("success");await refresh()}catch(e){$("status").textContent=e.message;await refresh()}};
+async function loadTasks(){try{const tasks=await api("/api/tasks");$("tasklist").innerHTML="";tasks.forEach(t=>{const el=document.createElement("div");el.className="panel task";const info=document.createElement("div");info.className="info";const title=document.createElement("strong");title.textContent=t.title;const desc=document.createElement("small");desc.textContent=t.description+" · +"+t.reward+" ATX";info.append(title,desc);const btn=document.createElement("button");btn.className="smallbtn";btn.textContent=t.done?"CLAIMED":"OPEN";btn.disabled=!!t.done;btn.onclick=async()=>{window.open(t.url,"_blank");try{await api("/api/tasks/"+t.id+"/complete",{method:"POST"});btn.textContent="CLAIMED";btn.disabled=true;await refresh()}catch(e){alert(e.message)}};el.append(info,btn);$("tasklist").append(el)})}catch(e){$("tasklist").textContent=e.message}}
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText($("refLink").value);$("copy").textContent="COPIED!"}catch(e){$("refLink").select();document.execCommand("copy")}};
+async function referral(){try{$("refLink").value=(await api("/api/referral")).link}catch(e){$("refLink").value=e.message}}
+if(!auth){$("status").textContent="Preview mode: open this Mini App from its Telegram bot to sign in."}else{refresh();referral();loadTasks()}
+</script></body></html>
